@@ -9,7 +9,6 @@ import { User, Membership } from '../entity/app.entity';
 describe('UsersController', () => {
   let usersController: UsersController;
   let usersService: UsersService;
-  let clubsClientService: ClubsClientService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,7 +19,6 @@ describe('UsersController', () => {
 
     usersController = module.get<UsersController>(UsersController);
     usersService = module.get<UsersService>(UsersService);
-    clubsClientService = module.get<ClubsClientService>(ClubsClientService);
   });
 
   describe('getUsers', () => {
@@ -75,20 +73,22 @@ describe('UsersController', () => {
         clubName: 'ACM',
       };
 
-      jest.spyOn(usersService, 'joinClub').mockResolvedValue(membership);
+      const joinClubSpy = jest
+        .spyOn(usersService, 'joinClub')
+        .mockResolvedValue(membership);
 
       const result = await usersController.joinClub(userId, { clubName });
       expect(result).toEqual(membership);
-      expect(usersService.joinClub).toHaveBeenCalledWith(userId, clubName);
+      expect(joinClubSpy).toHaveBeenCalledWith(userId, clubName);
     });
 
     it('should throw if user does not exist', async () => {
       const userId = 999;
       const clubName = 'ACM';
 
-      jest.spyOn(usersService, 'joinClub').mockRejectedValue(
-        new Error('User with id "999" does not exist'),
-      );
+      jest
+        .spyOn(usersService, 'joinClub')
+        .mockRejectedValue(new Error('User with id "999" does not exist'));
 
       await expect(
         usersController.joinClub(userId, { clubName }),
@@ -99,9 +99,11 @@ describe('UsersController', () => {
       const userId = 1;
       const clubName = 'Nonexistent Club';
 
-      jest.spyOn(usersService, 'joinClub').mockRejectedValue(
-        new Error('Club with name "Nonexistent Club" does not exist'),
-      );
+      jest
+        .spyOn(usersService, 'joinClub')
+        .mockRejectedValue(
+          new Error('Club with name "Nonexistent Club" does not exist'),
+        );
 
       await expect(
         usersController.joinClub(userId, { clubName }),
@@ -117,11 +119,13 @@ describe('UsersController', () => {
         { userId: 1, clubId: 2, clubName: 'UCLA SWE' },
       ];
 
-      jest.spyOn(usersService, 'getUserClubs').mockResolvedValue(memberships);
+      const getUserClubsSpy = jest
+        .spyOn(usersService, 'getUserClubs')
+        .mockResolvedValue(memberships);
 
       const result = await usersController.getUserClubs(userId);
       expect(result).toEqual(memberships);
-      expect(usersService.getUserClubs).toHaveBeenCalledWith(userId);
+      expect(getUserClubsSpy).toHaveBeenCalledWith(userId);
     });
 
     it('should return empty array if user has no clubs', async () => {
@@ -137,9 +141,9 @@ describe('UsersController', () => {
     it('should throw if user does not exist', async () => {
       const userId = 999;
 
-      jest.spyOn(usersService, 'getUserClubs').mockRejectedValue(
-        new Error('User with id "999" does not exist'),
-      );
+      jest
+        .spyOn(usersService, 'getUserClubs')
+        .mockRejectedValue(new Error('User with id "999" does not exist'));
 
       await expect(usersController.getUserClubs(userId)).rejects.toThrow(
         'User with id "999" does not exist',
@@ -147,4 +151,3 @@ describe('UsersController', () => {
     });
   });
 });
-

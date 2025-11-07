@@ -1,12 +1,9 @@
 // users/src/users.service.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ClubsClientService } from './clubs-client.service';
-import { User, Membership, Club } from '../entity/app.entity';
+import { Club } from '../entity/app.entity';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -61,9 +58,7 @@ describe('UsersService', () => {
     });
 
     it('should throw NotFoundException if user does not exist', async () => {
-      await expect(service.findOneById(999)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(service.findOneById(999)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -82,7 +77,7 @@ describe('UsersService', () => {
       const clubName = 'ACM';
       const club: Club = { id: 1, name: 'ACM' };
 
-      jest
+      const getClubByNameSpy = jest
         .spyOn(clubsClientService, 'getClubByName')
         .mockResolvedValue(club);
 
@@ -93,7 +88,7 @@ describe('UsersService', () => {
         clubId: 1,
         clubName: 'ACM',
       });
-      expect(clubsClientService.getClubByName).toHaveBeenCalledWith(clubName);
+      expect(getClubByNameSpy).toHaveBeenCalledWith(clubName);
     });
 
     it('should throw NotFoundException if user does not exist', async () => {
@@ -130,9 +125,7 @@ describe('UsersService', () => {
       const clubName = 'ACM';
       const club: Club = { id: 1, name: 'ACM' };
 
-      jest
-        .spyOn(clubsClientService, 'getClubByName')
-        .mockResolvedValue(club);
+      jest.spyOn(clubsClientService, 'getClubByName').mockResolvedValue(club);
 
       // First join should succeed
       await service.joinClub(userId, clubName);
@@ -169,9 +162,7 @@ describe('UsersService', () => {
       const userId = 1;
       const club: Club = { id: 1, name: 'ACM' };
 
-      jest
-        .spyOn(clubsClientService, 'getClubByName')
-        .mockResolvedValue(club);
+      jest.spyOn(clubsClientService, 'getClubByName').mockResolvedValue(club);
 
       // Join a club first
       await service.joinClub(userId, 'ACM');
@@ -196,4 +187,3 @@ describe('UsersService', () => {
     });
   });
 });
-

@@ -1,7 +1,7 @@
 // users/src/clubs-client.service.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpModule, HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
 import { of, throwError } from 'rxjs';
 import { ClubsClientService } from './clubs-client.service';
 import { Club } from '../entity/app.entity';
@@ -31,13 +31,13 @@ describe('ClubsClientService', () => {
         config: {} as any,
       };
 
-      jest.spyOn(httpService, 'get').mockReturnValue(of(mockResponse));
+      const getSpy = jest
+        .spyOn(httpService, 'get')
+        .mockReturnValue(of(mockResponse as any));
 
       const result = await service.getClubByName('ACM');
       expect(result).toEqual(club);
-      expect(httpService.get).toHaveBeenCalledWith(
-        'http://localhost:3001/clubs/ACM',
-      );
+      expect(getSpy).toHaveBeenCalledWith('http://localhost:3001/clubs/ACM');
     });
 
     it('should throw HttpException when club does not exist (404)', async () => {
@@ -69,9 +69,7 @@ describe('ClubsClientService', () => {
 
       jest.spyOn(httpService, 'get').mockReturnValue(throwError(() => error));
 
-      await expect(service.getClubByName('ACM')).rejects.toThrow(
-        HttpException,
-      );
+      await expect(service.getClubByName('ACM')).rejects.toThrow(HttpException);
       await expect(service.getClubByName('ACM')).rejects.toThrow(
         'Failed to communicate with Clubs Service',
       );
@@ -82,9 +80,7 @@ describe('ClubsClientService', () => {
 
       jest.spyOn(httpService, 'get').mockReturnValue(throwError(() => error));
 
-      await expect(service.getClubByName('ACM')).rejects.toThrow(
-        HttpException,
-      );
+      await expect(service.getClubByName('ACM')).rejects.toThrow(HttpException);
       await expect(service.getClubByName('ACM')).rejects.toThrow(
         'Failed to communicate with Clubs Service',
       );
@@ -105,13 +101,13 @@ describe('ClubsClientService', () => {
         config: {} as any,
       };
 
-      jest.spyOn(httpService, 'get').mockReturnValue(of(mockResponse));
+      const getSpy = jest
+        .spyOn(httpService, 'get')
+        .mockReturnValue(of(mockResponse as any));
 
       const result = await service.getClubById(1);
       expect(result).toEqual(clubs[0]);
-      expect(httpService.get).toHaveBeenCalledWith(
-        'http://localhost:3001/clubs',
-      );
+      expect(getSpy).toHaveBeenCalledWith('http://localhost:3001/clubs');
     });
 
     it('should throw HttpException when club with id does not exist', async () => {
@@ -127,7 +123,7 @@ describe('ClubsClientService', () => {
         config: {} as any,
       };
 
-      jest.spyOn(httpService, 'get').mockReturnValue(of(mockResponse));
+      jest.spyOn(httpService, 'get').mockReturnValue(of(mockResponse as any));
 
       await expect(service.getClubById(999)).rejects.toThrow(HttpException);
       await expect(service.getClubById(999)).rejects.toThrow(
@@ -151,4 +147,3 @@ describe('ClubsClientService', () => {
     });
   });
 });
-

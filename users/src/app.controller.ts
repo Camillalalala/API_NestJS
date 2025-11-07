@@ -1,5 +1,12 @@
 // users/src/users.controller.ts
-import { Controller, Get, Post, Param, Body, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import type { createUser } from '../entity/app.entity';
 
