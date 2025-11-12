@@ -8,3 +8,7 @@ export interface Club {
 export interface createClub {
   name: string;
 }
+
+export interface updateClub {
+  name?: string;
+}

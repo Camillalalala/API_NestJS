@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Club, createClub } from '../entity/app.entity';
+import { Club, createClub, updateClub } from '../entity/app.entity';
 
 @Injectable()
 export class ClubsService {
@@ -24,5 +24,16 @@ export class ClubsService {
     const newClub = { ...createClub, id: this.clubs.length + 1 };
     this.clubs.push(newClub);
     return await Promise.resolve(newClub);
+  }
+
+  async update(id: number, update: updateClub): Promise<Club> {
+    const index = this.clubs.findIndex((c) => c.id === id);
+    if (index === -1) {
+      throw new NotFoundException(`Club with id "${id}" does not exist`);
+    }
+    const existing = this.clubs[index];
+    const updated: Club = { ...existing, ...update };
+    this.clubs[index] = updated;
+    return await Promise.resolve(updated);
   }
 }

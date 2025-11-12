@@ -1,8 +1,8 @@
 // clubs/src/clubs.controller.ts
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Body } from '@nestjs/common';
 import { ClubsService } from './clubs.service';
 import { MembersService } from './members/members.service';
-import type { createClub } from '../entity/app.entity';
+import type { createClub, updateClub } from '../entity/app.entity';
 
 @Controller('clubs')
 export class ClubsController {
@@ -26,7 +26,13 @@ export class ClubsController {
   }
 
   @Post()
-  create(@Body() createClub: createClub) {
-    return this.clubsService.create(createClub);
+  async create(@Body() createClub: createClub) {
+    return await this.clubsService.create(createClub);
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateClub: updateClub) {
+    // convert id to number and delegate to service
+    return this.clubsService.update(Number(id), updateClub);
   }
 }

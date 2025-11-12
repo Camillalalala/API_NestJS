@@ -1,12 +1,12 @@
 // users/entity/app.entity.ts
 
 export interface User {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
-  
+
 export interface createUser {
-    name: string;
+  name: string;
 }
 
 export interface Club {
