@@ -1,7 +1,7 @@
-import { AppService } from './clubs.service';
+import { ClubsService } from './clubs.service';
 
 async function test() {
-  const service = new AppService();
+  const service = new ClubsService();
 
   console.log('All clubs:', await service.getClubs());
 
