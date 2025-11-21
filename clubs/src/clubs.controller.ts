@@ -51,4 +51,12 @@ export class ClubsController {
       await this.clubsService.removeEventReference(eventId);
     return { removed: result.removed, eventId: result.eventId };
   }
+
+  @Post(':clubId/events')
+  async createEventForClub(
+    @Param('clubId', ParseIntPipe) clubId: number,
+    @Body() body: { title: string },
+  ): Promise<{ id: number; clubId: number; title: string }> {
+    return this.clubsService.createEventForClub(clubId, { title: body.title });
+  }
 }

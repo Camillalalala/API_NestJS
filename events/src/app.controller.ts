@@ -1,4 +1,5 @@
-import { Controller, Get, Param, Put, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Param, Put, Delete, Post, Body} from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller('events')
@@ -24,5 +25,10 @@ export class AppController {
   @Delete(':eventId')
   async deleteEvent(@Param('eventId') eventId: string) {
     return this.appService.deleteEvent(eventId);
+  }
+
+  @Post()
+  async createEvent(@Body() body: { clubId: number; title: string }) {
+    return this.appService.createEvent({ clubId: body.clubId, title: body.title });
   }
 }

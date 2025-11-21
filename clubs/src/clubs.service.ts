@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
+import axios from 'axios';
 import { Club, createClub, updateClub } from '../entity/app.entity';
 
 @Injectable()
@@ -43,5 +45,28 @@ export class ClubsService {
     // In a real implementation you would locate clubs referencing this event and remove the event from event list associated with club.
     // Here we just simulate success.
     return await Promise.resolve({ removed: true, eventId });
+  }
+
+  private readonly eventsServiceBase = 'http://localhost:3002';
+
+  async createEventForClub(clubId: number, payload: { title: string },): Promise<{ id: number; clubId: number; title: string }> {
+    const clubExists = this.clubs.some((c) => c.id === clubId);
+    if (!clubExists) {
+      throw new NotFoundException(`Club with id "${clubId}" does not exist`);
+    }
+    const url = `${this.eventsServiceBase}/events`;
+    const response = await axios.post<{
+      id: number;
+      clubId: number;
+      title: string;
+    }>(url, {
+      clubId,
+      title: payload.title,
+    });
+    return {
+      id: response.data.id,
+      clubId: response.data.clubId,
+      title: response.data.title,
+    };
   }
 }

@@ -24,10 +24,20 @@ export class AppService {
 
   async callEventDetailsNotif(eventId: string): Promise<{ message: string }> {
     const url = `${this.notificationsBaseUrl}/notifications/event-update`;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { data } = await axios.post(url);
     return {
       message: `Notifies when ${eventId} details has been modified: ${data}`,
     };
+  }
+
+  private events: Array<{ id: number; clubId: number; title: string }> = [];
+
+  createEvent(payload: { clubId: number; title: string }) {
+    const id = this.events.length + 1;
+    const event = { id, clubId: payload.clubId, title: payload.title };
+    this.events.push(event);
+    return event;
   }
 
   async deleteEvent(eventId: string): Promise<{
