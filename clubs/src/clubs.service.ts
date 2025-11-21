@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
+import axios from 'axios';
 import { Club, createClub, updateClub } from '../entity/app.entity';
 
 @Injectable()
@@ -35,5 +37,50 @@ export class ClubsService {
     const updated: Club = { ...existing, ...update };
     this.clubs[index] = updated;
     return await Promise.resolve(updated);
+  }
+
+  async removeEventReference(
+    eventId: number,
+  ): Promise<{ removed: boolean; eventId: number }> {
+    // In a real implementation you would locate clubs referencing this event and remove the event from event list associated with club.
+    // Here we just simulate success.
+    return await Promise.resolve({ removed: true, eventId });
+  }
+
+  private readonly eventsServiceBase = 'http://localhost:3002';
+  private readonly roles: Record<number, Record<number, string>> = {
+    // clubId -> userId -> role
+    1: { 1: 'officer', 2: 'member' },
+    2: { 2: 'officer' },
+  };
+
+  async createEventForClub(clubId: number, payload: { title: string },): Promise<{ id: number; clubId: number; title: string }> {
+    const clubExists = this.clubs.some((c) => c.id === clubId);
+    if (!clubExists) {
+      throw new NotFoundException(`Club with id "${clubId}" does not exist`);
+    }
+    const url = `${this.eventsServiceBase}/events`;
+    const response = await axios.post<{
+      id: number;
+      clubId: number;
+      title: string;
+    }>(url, {
+      clubId,
+      title: payload.title,
+    });
+    return {
+      id: response.data.id,
+      clubId: response.data.clubId,
+      title: response.data.title,
+    };
+  }
+
+  getUserRole(clubId: number, userId: number): { clubId: number; userId: number; role: string } {
+    const clubExists = this.clubs.some((c) => c.id === clubId);
+    if (!clubExists) {
+      throw new NotFoundException(`Club with id "${clubId}" does not exist`);
+    }
+    const role = this.roles[clubId]?.[userId] || 'none';
+    return { clubId, userId, role };
   }
 }
