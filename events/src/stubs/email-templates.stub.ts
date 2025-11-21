@@ -59,4 +59,15 @@ export const EMAIL_TEMPLATES: Record<string, EmailTemplate> = {
     text: 'Hi {{name}}, you are unsubscribed from {{scope}} notifications.',
     variables: ['name', 'scope'],
   },
+  'event-update': {
+    key: 'event-update',
+    subject: 'Event details has been updated',
+    html: `
+      <h2>Update</h2>
+      <p>Hi {{name}}, an event has been updated.</p>
+      <p>You can re-subscribe anytime in your settings.</p>
+    `,
+    text: 'Hi {{name}}, an event has been updated.',
+    variables: ['name', 'scope'],
+  },
 };

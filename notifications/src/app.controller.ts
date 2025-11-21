@@ -1,4 +1,4 @@
-import { Controller, Get, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Delete, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller('notifications')
@@ -18,5 +18,10 @@ export class AppController {
   @Delete('unsubscribe/:userId')
   async unsubscribeUser(@Param('userId') userId: string) {
     return await this.appService.unsubscribeUser(userId);
+  }
+
+  @Post('event-update')
+  async createEventUpdateNotification() {
+    return await this.appService.fetchTemplate('event-update');
   }
 }
