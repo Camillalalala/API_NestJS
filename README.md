@@ -12,6 +12,19 @@
  - Rate limiting: The gateway applies a global rate limiter (`express-rate-limit`) by default (100 requests per 15 minutes per IP). Adjust limits in `gateway/src/main.ts`.
 - Proxy behavior (current config): Express mounts the proxy at a prefix and removes that mount path before forwarding, so the gateway currently uses "doubled" paths for service endpoints. Example: `GET /clubs/clubs` at the gateway becomes `GET /clubs` at the clubs service (because the gateway mount `/clubs` is removed before proxying). If you prefer single-prefix paths, update `pathRewrite` rules to preserve the prefix.
 
+## Rate Limiting Testing
+Paste directly in Powershell
+
+for ($i=1; $i -le 20; $i++) {
+  try {
+    $r = Invoke-WebRequest -Uri "http://localhost:3003/overview" -UseBasicParsing
+    Write-Host "${i}: $($r.StatusCode)"
+  } catch {
+    $code = $_.Exception.Response.StatusCode.value__
+    Write-Host "${i}: $code"
+  }
+}
+
 ## Run Services
 Start any services you need (recommend `clubs`, `events`, `notifications`, `auth`, and `users` if available):
 

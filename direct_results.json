@@ -2,19 +2,19 @@
   {
     "url": "http://localhost:3001/clubs",
     "status": 200,
-    "timestamp": "2025-12-05T02:11:54.413Z",
-    "latency": 32
+    "timestamp": "2025-12-05T02:35:23.515Z",
+    "latency": 30
   },
   {
     "url": "http://localhost:3002/events",
     "status": 200,
-    "timestamp": "2025-12-05T02:11:54.419Z",
-    "latency": 5
+    "timestamp": "2025-12-05T02:35:23.519Z",
+    "latency": 3
   },
   {
     "url": "http://localhost:3005/users",
     "status": 200,
-    "timestamp": "2025-12-05T02:11:54.422Z",
-    "latency": 3
+    "timestamp": "2025-12-05T02:35:23.521Z",
+    "latency": 2
   }
 ]
