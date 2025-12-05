@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CI Gateway Demo</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; }
+      header { display: flex; align-items: center; gap: 1rem; }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 1rem; }
+      section { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; }
+      pre { background: #f7f7f9; padding: .75rem; border-radius: 6px; overflow: auto; }
+      button { padding: .5rem .75rem; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; }
+      button:hover { background: #f3f3f3; }
+      .status { font-size: .9rem; color: #555; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Gateway Proxy Explorer</h1>
+      <span class="status" id="status">Gateway: http://localhost:3003</span>
+    </header>
+
+    <div class="grid">
+      <section>
+        <h2>Overview (gateway controller)</h2>
+        <button id="btn-overview">Fetch /overview</button>
+        <pre id="out-overview">(click to fetch)</pre>
+      </section>
+
+      <section>
+        <h2>Clubs (proxied)</h2>
+        <button id="btn-clubs">Fetch /clubs/clubs</button>
+        <pre id="out-clubs">(click to fetch)</pre>
+      </section>
+
+      <section>
+        <h2>Users (proxied)</h2>
+        <button id="btn-users">Fetch /users/users</button>
+        <pre id="out-users">(click to fetch)</pre>
+      </section>
+
+      <section>
+        <h2>Events (proxied)</h2>
+        <button id="btn-events">Fetch /events/events</button>
+        <pre id="out-events">(click to fetch)</pre>
+      </section>
+
+      <section>
+        <h2>Notifications (proxied)</h2>
+        <button id="btn-notifs">Fetch /notifications/notifications</button>
+        <pre id="out-notifs">(click to fetch)</pre>
+      </section>
+
+      <section>
+        <h2>Auth Permissions (proxied)</h2>
+        <button id="btn-auth">Fetch /auth/auth/permissions/check/1?clubId=1</button>
+        <pre id="out-auth">(click to fetch)</pre>
+      </section>
+    </div>
+
+    <script>
+      const base = 'http://localhost:3003';
+      async function hit(path) {
+        const res = await fetch(base + path);
+        const text = await res.text();
+        let payload;
+        try { payload = JSON.parse(text); } catch { payload = text; }
+        return { status: res.status, payload };
+      }
+      function render(el, data) {
+        el.textContent = JSON.stringify(data, null, 2);
+      }
+      document.getElementById('btn-overview').onclick = async () => {
+        render(document.getElementById('out-overview'), await hit('/overview'));
+      };
+      document.getElementById('btn-clubs').onclick = async () => {
+        render(document.getElementById('out-clubs'), await hit('/clubs/clubs'));
+      };
+      document.getElementById('btn-users').onclick = async () => {
+        render(document.getElementById('out-users'), await hit('/users/users'));
+      };
+      document.getElementById('btn-events').onclick = async () => {
+        render(document.getElementById('out-events'), await hit('/events/events'));
+      };
+      document.getElementById('btn-notifs').onclick = async () => {
+        render(document.getElementById('out-notifs'), await hit('/notifications/notifications'));
+      };
+      document.getElementById('btn-auth').onclick = async () => {
+        render(document.getElementById('out-auth'), await hit('/auth/auth/permissions/check/1?clubId=1'));
+      };
+    </script>
+  </body>
+</html>
