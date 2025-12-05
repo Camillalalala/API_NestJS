@@ -14,10 +14,10 @@
 
 ## Testing and Data Analysis
 From the repo root: 
-Rate Limiting Test: .\tools\rate_limit_test.ps1
-Direct Microservice Request Burst: .\tools\direct_burst.ps1
-API Gateway Request Burst: .\tools\gateway_bursts.ps1
-Plotting Latency vs Time Graphs: .\tools\plot_latency.ps1
+- Rate Limiting Test: .\tools\rate_limit_test.ps1
+- Direct Microservice Request Burst: .\tools\direct_burst.ps1
+- API Gateway Request Burst: .\tools\gateway_bursts.ps1
+- Plotting Latency vs Time Graphs: .\tools\plot_latency.ps1
 
 ## Run Services
 Start any services you need (recommend `clubs`, `events`, `notifications`, `auth`, and `users` if available):
