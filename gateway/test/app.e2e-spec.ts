@@ -1,25 +1,30 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+describe('Gateway Routes (e2e)', () => {
+  const base = 'http://localhost:3003';
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
+  it('GET /overview returns 200', async () => {
+    await request(base).get('/overview').expect(200);
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  it('GET /clubs/clubs proxies to clubs service', async () => {
+    await request(base).get('/clubs/clubs').expect(200);
+  });
+
+  it('GET /users/users proxies to users service', async () => {
+    await request(base).get('/users/users').expect(200);
+  });
+
+  it('GET /events/events proxies to events service', async () => {
+    await request(base).get('/events/events').expect(200);
+  });
+  it('GET /notifications/notifications proxies to notifications service', async () => {
+    await request(base).get('/notifications/notifications').expect(200);
+  });
+  it('GET /auth/auth/permissions/check/:userId proxies to auth service', async () => {
+    await request(base)
+      .get('/auth/auth/permissions/check/1')
+      .query({ clubId: 1 })
+      .expect(200);
   });
 });

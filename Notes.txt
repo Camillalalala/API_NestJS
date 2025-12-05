@@ -1,8 +1,0 @@
-Ports:
-auth - 3000
-clubs - 3001
-events - 3002
-gateway - 3003
-notifications - 3004
-users - 3005
-
