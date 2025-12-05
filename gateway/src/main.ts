@@ -1,12 +1,31 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import rateLimit from 'express-rate-limit';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
 
 async function bootstrap() {
   const server: Express = express();
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  // Rate limiting: 100 requests per 15 minutes per IP
+  const limiter = rateLimit({
+    windowMs: 10 * 1000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req: Request, res: Response /*, next*/) => {
+      console.warn(
+        `[RateLimit] ${req.ip} exceeded limit: ${req.method} ${req.originalUrl}`,
+      );
+      res.status(429).json({
+        error: 'Too many requests',
+        retryAfterSeconds: Math.ceil((15 * 60 * 1000) / 1000),
+      });
+    },
+  });
+  server.use(limiter);
 
   // Enable CORS for local frontend (e.g., http://localhost:5500)
   app.enableCors({

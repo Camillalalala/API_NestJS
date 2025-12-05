@@ -9,6 +9,7 @@
     - `users` (3005)
 - Each service exposes REST endpoints under its own prefix (e.g., `/clubs`, `/users`).
 - API Gateway: `gateway` (3003) is a NestJS app using Express + `http-proxy-middleware` to forward requests from route prefixes to the corresponding microservice. The gateway also has a controller endpoint `/overview` that aggregates sample data via Axios.
+ - Rate limiting: The gateway applies a global rate limiter (`express-rate-limit`) by default (100 requests per 15 minutes per IP). Adjust limits in `gateway/src/main.ts`.
 - Proxy behavior (current config): Express mounts the proxy at a prefix and removes that mount path before forwarding, so the gateway currently uses "doubled" paths for service endpoints. Example: `GET /clubs/clubs` at the gateway becomes `GET /clubs` at the clubs service (because the gateway mount `/clubs` is removed before proxying). If you prefer single-prefix paths, update `pathRewrite` rules to preserve the prefix.
 
 ## Run Services

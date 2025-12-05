@@ -1,0 +1,22 @@
+{
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "typescript.tsserver.watchOptions": {
+    "excludeDirectories": [
+      "**/node_modules/**",
+      "**/dist/**"
+    ]
+  },
+  "eslint.workingDirectories": [
+    { "directory": "gateway", "changeProcessCWD": true },
+    { "directory": "auth", "changeProcessCWD": true },
+    { "directory": "clubs", "changeProcessCWD": true },
+    { "directory": "events", "changeProcessCWD": true },
+    { "directory": "notifications", "changeProcessCWD": true },
+    { "directory": "users", "changeProcessCWD": true }
+  ],
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true
+  }
+}

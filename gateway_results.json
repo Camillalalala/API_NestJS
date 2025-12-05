@@ -1,0 +1,20 @@
+[
+  {
+    "url": "http://localhost:3003/clubs/clubs",
+    "status": 200,
+    "timestamp": "2025-12-05T02:11:54.432Z",
+    "latency": 9
+  },
+  {
+    "url": "http://localhost:3003/events/events",
+    "status": 200,
+    "timestamp": "2025-12-05T02:11:54.438Z",
+    "latency": 6
+  },
+  {
+    "url": "http://localhost:3003/users/users",
+    "status": 200,
+    "timestamp": "2025-12-05T02:11:54.443Z",
+    "latency": 5
+  }
+]
