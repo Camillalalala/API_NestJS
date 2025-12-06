@@ -1,0 +1,14 @@
+[
+    {
+        "url":  "http://localhost:3001/clubs",
+        "status":  200,
+        "latency_ms":  43.56,
+        "ts":  "2025-12-05T23:16:40.8887175-08:00"
+    },
+    {
+        "url":  "http://localhost:3003/clubs/clubs",
+        "status":  200,
+        "latency_ms":  55.21,
+        "ts":  "2025-12-05T23:16:40.9439323-08:00"
+    }
+]
